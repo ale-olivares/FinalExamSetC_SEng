@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Final Exam - Set C</title>
+
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+
+
+    <script th:inline="javascript">
+        var u = [[${session.qty0}]];
+        if(u==1){
+            alert('qty cannot be 0');
+        }
+    </script>
+</head>
+
+<body>
+<h1>Final Exam Set C</h1>
+<h1>Category Sales Summary Table</h1>
+
+<div class="container mt-2">
+    <div class="card-body">
+        <table class="table">
+            <thead>
+            <tr>
+                <th>Category Code</th>
+                <th>Category Description</th>
+                <th>Total Sales</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="summary : ${salesSummaries}">
+                <td th:text="${summary.categoryCode}"></td>
+                <td th:text="${summary.categoryDescription}"></td>
+                <td th:text="${summary.totalSales}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="col-md-6 offset-3" style="background: aqua">
+    <form method="post" th:action="@{/save}" th:object="${sales}">
+        <div>
+            <label>Receipt No:</label>
+            <input class="form-control" type="number" th:field="*{recno}" >
+        </div>
+        <div>
+            <label for="itemType">Item Type:</label>
+            <select id="itemType" name="itemType" th:field="*{icode}">
+                <option value="">Select option</option>
+                <option th:each="item : ${itemList}"
+                        th:value="${item.lCode}"
+                        th:text="${item.lCode + ': ' + item.lDesc}"></option>
+            </select>
+        </div>
+        <div>
+            <label>Quantity:</label>
+            <input class="form-control" type="number" th:field="*{qty}" min="1">
+        </div>
+        <div>
+            <label>Transaction Date:</label>
+            <input class="form-control" type="date" th:field="*{date}" id="transactionDate">
+        </div>
+        <button type="submit" class="btn-primary">Save</button>
+    </form>
+</div>
+
+<div class="container mt-2 pre-scrollable">
+    <div class="card-body">
+        <table class="table">
+            <thead>
+            <tr>
+                <th>Receipt No</th>
+                <th>Item Code</th>
+                <th>Quantity</th>
+                <th>Transaction Date</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="p:${salesList}">
+                <td th:text="${p.recno}"></td>
+                <td th:text="${p.icode}"></td>
+                <td th:text="${p.qty}"></td>
+                <td th:text="${p.date}"></td>
+                <td> <a class="btn btn-danger" th:href="@{deleteSale(id=${p.id}, recno=${p.recno})}"> Delete</a></td>
+                <td> <a class="btn btn-success" th:href="@{edit(id=${p.id}, recno=${p.recno})}"> Edit</a></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+    const currentDate = new Date().toISOString().split('T')[0];
+    document.getElementById("transactionDate").value = currentDate;
+</script>
+</body>
+</html>

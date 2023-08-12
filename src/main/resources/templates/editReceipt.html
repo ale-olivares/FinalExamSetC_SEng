@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Edit Receipt</title>
+</head>
+<body>
+<form method="post" th:action="@{/edit}" style="width: 250px;">
+  <input type="hidden" name="id" th:value="${sale.id}" />
+  <input type="hidden" name="originalSeatLetter" th:value="${recno}" />
+  <div>
+    <label>Receipt no:</label>
+    <input class="form-control" type="text" name="seatno" th:value="${recno}" readonly>
+  </div>
+  <div>
+    <label>Item Type:</label>
+    <input class="form-control" type="text" name="itemType" th:value="${sale.icode}" readonly>
+  </div>
+  <div>
+    <label>Quantity:</label>
+    <input class="form-control" type="number" name="quantity" th:value="${sale.qty}">
+  </div>
+  <div>
+    <label>Transaction Date:</label>
+    <input class="form-control" type="text" name="transactionDate" th:value="${#dates.format(sale.date, 'yyyy-MM-dd')}" readonly>
+  </div>
+  <button type="submit" class="btn btn-primary">Save</button>
+</form>
+</body>
+</html>
+
